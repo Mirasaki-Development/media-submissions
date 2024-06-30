@@ -1,0 +1,11 @@
+services:
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=file:./production.db
+    volumes:
+      - ./production.db:/app/production.db

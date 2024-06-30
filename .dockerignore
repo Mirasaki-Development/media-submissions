@@ -1,0 +1,15 @@
+.vscode
+.dist
+node_modules
+*.md
+*.env
+config.example.ts
+.gitignore
+.dockerignore
+docker-compose.yml
+Dockerfile
+
+# etc md, covered by *.md
+LICENSE
+README.md
+TODO.md

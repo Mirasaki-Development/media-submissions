@@ -5,9 +5,14 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsup",
-    "start": "node dist/index.js",
     "dev": "tsup --watch --onSuccess \"node dist/index.js\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prebuild": "npx prisma generate",
+    "predev": "npx prisma generate",
+    "prestart": "npx prisma migrate deploy",
+    "setup": "copyfiles -fs .env.example .env && copyfiles -fs config.example.ts config.ts && npm install",
+    "start": "node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "typecheck": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
@@ -31,10 +36,17 @@
   },
   "homepage": "https://github.com/Mirasaki-Development/media-submissions#readme",
   "devDependencies": {
+    "@types/common-tags": "^1.8.4",
+    "copyfiles": "^2.4.1",
+    "prisma": "^5.16.1",
     "tsup": "^8.1.0",
     "typescript": "^5.5.2"
   },
   "dependencies": {
-    "discord.js": "^14.15.3"
+    "@prisma/client": "^5.16.1",
+    "common-tags": "^1.8.2",
+    "cron": "^3.1.7",
+    "discord.js": "^14.15.3",
+    "dotenv": "^16.4.5"
   }
 }

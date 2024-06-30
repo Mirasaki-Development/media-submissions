@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Guild {
+  id Int @id @default(autoincrement())
+  guildId String
+  
+}
+
+model Submission {
+  id Int @id @default(autoincrement())
+  mediaModuleId String
+
+  userId String
+  guildId String
+  messageId String
+  channelId String
+
+  processed Boolean @default(false)
+  processedAt DateTime?
+
+  // Note: If these fields are populated,
+  // it means the submission won and the
+  // message points to the winner announcement
+  processedMessageId String?
+  processedMessageChannelId String?
+
+  cooldownExpiresAt DateTime?
+  createdAt DateTime @default(now())
+}

@@ -7,17 +7,17 @@ export const discordMediaSource: MediaSource = {
 
 export const imgurMediaSource: MediaSource = {
   name: 'Imgur',
-  validationURL: 'https://imgur.com/gallery/{id}',
+  validationURL: 'https://imgur.com/gallery/',
 }
 
 export const medalMediaSource: MediaSource = {
   name: 'Medal',
-  validationURL: 'https://medal.tv/clips/{id}',
+  validationURL: 'https://medal.tv/clips/',
 }
 
 export const youtubeMediaSource: MediaSource = {
   name: 'Youtube',
-  validationURL: 'https://www.youtube.com/watch?v={id}',
+  validationURL: 'https://www.youtube.com/watch?v=',
 }
 
 export const defaultMediaSources: MediaSource[] = [
@@ -26,3 +26,39 @@ export const defaultMediaSources: MediaSource[] = [
   medalMediaSource,
   youtubeMediaSource,
 ]
+
+export const getMediaSourceByName = (name: string): MediaSource | undefined => {
+  return defaultMediaSources.find((source) => source.name === name)
+}
+
+export const discordAttachmentSources = [
+  'cdn.discordapp.com/attachments/',
+  'media.discordapp.net/attachments/',
+  'media.discordapp.net/external/',
+]
+
+export const messageHasMediaSource = (
+  message: string,
+  mediaSources: MediaSource[],
+  quantity: number | null,
+): MediaSource | MediaSource[] | false => {
+  if (quantity !== null) {
+    const urls = message.split(' ').filter((word) => word.includes('http'))
+    const validSources = urls.map((url) => mediaSources.find((source) => {
+      if (source.validationURL === 'attachment') return discordAttachmentSources.some((attachmentSource) => url.includes(attachmentSource))
+      return url.includes(source.validationURL)
+    }))
+    const uniqueSources = [...new Set(validSources)] as MediaSource[]
+    if (uniqueSources.length > quantity) return false;
+    return uniqueSources.length === 0
+      ? false
+      : uniqueSources.length === 1
+        ? uniqueSources[0]
+        : uniqueSources
+  }
+
+  return mediaSources.find((source) => {
+    if (source.validationURL === 'attachment') return discordAttachmentSources.some((attachmentSource) => message.includes(attachmentSource))
+    return message.includes(source.validationURL)
+  }) ?? false
+}

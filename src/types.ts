@@ -1,12 +1,14 @@
+import { ThreadAutoArchiveDuration } from 'discord.js';
+
 export type AppConfig = {
-  /**
-   * The Discord client information
-   * @see https://discord.com/developers/applications
-   */
-  client: {
-    id: string;
-    token: string;
-  };
+  // /**
+  //  * The Discord client information
+  //  * @see https://discord.com/developers/applications
+  //  */
+  // client: {
+  //   id: string;
+  //   token: string;
+  // };
   /**
    * The media modules to use
    */
@@ -21,6 +23,12 @@ export type MediaSource = {
 }
 
 export type MediaModule = {
+  /**
+   * The unique identifier of this media module - changing this
+   * will cause the module to be treated as a new module
+   * and not retain any previous data
+   */
+  id: string;
   /** The name of this media module */
   name: string;
   /** The type of media this module supports */
@@ -66,5 +74,8 @@ export type MediaModule = {
   submissionThread: {
     enabled: boolean;
     name: string;
+    autoArchiveDuration: ThreadAutoArchiveDuration | null;
+    /** The rate limit per user (slowmode) for the thread in seconds */
+    rateLimitPerUser: number | null;
   }
 };
