@@ -20,7 +20,7 @@ Every aspect of this app and it's functionality is configurable, including:
 
 - The media type: `image`, `video` or `either`
 - The time frame: How long do submissions run/when is a winner chosen?
-- The emojis used to cast votes: `👍` and `👍` by default
+- The emojis used to cast votes: `👍` and `👎` by default
 - Submission and forwarding channels
   - In which channel should users post their media?
   - In which channel should the winning submissions be posted?
