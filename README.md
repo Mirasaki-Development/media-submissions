@@ -1,12 +1,12 @@
 # 🖼️ media-submissions
 
-Media Submissions is a Discord bot that allows you to configure fully automatic, and user-driven, picture/clip of the week/month channels.
+Media Submissions is a Discord bot that allows you to configure fully automatic, and user-driven, media of the week/month channels.
 
 > This project was funded and open-sourced by [DayZ The Lab](https://dayzthelab.com).
 
 ## ❔ How does it work?
 
-You can specify which channels users should upload their media in, wether it's of the `image`, `video` or `either` type, and when a winner should be chosen.
+You can specify which channels users should upload their media in, whether it's of the `image`, `video` or `either` type, and when a winner should be chosen.
 
 When a user uploads a message **with** the specified media in the channel, the `👍` and `👎` emojis will be added to the message, allowing the community to cast their votes. Any message that does **not** have the specified media attached will be deleted, keeping the submission channels clean of any (potentially unwanted) user feedback. The message with the most up-votes will be chosen as the winner at the specified datetime.
 
