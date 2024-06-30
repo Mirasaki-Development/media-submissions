@@ -38,7 +38,7 @@ This application uses the following Discord Gateway Intents:
 - `GuildMessages`: Required to receive guild message events, as this is the source of submissions.
 - `MessageContent`: This is a **Privileged Intent**, and is required to determine if a message has *either* allowed media sources in it's attachments or message content through the `validationURL`.
 
-> ⚠️ **Note:** The Message Content intent is required, you have to enable it in the Discord Developer Portal, please view [our guide](https://wiki.mirasaki.dev/docs/discord-create-application#intents) if you need more information.
+> ⚠️ **Note:** The `Message Content` intent is required, you have to enable it in the Discord Developer Portal, please view [our guide](https://wiki.mirasaki.dev/docs/discord-create-application#intents) if you need more information.
 
 Please analyze the [source code](./src) if you have (data) security concerns, the intents are utilized in the following files:
 
