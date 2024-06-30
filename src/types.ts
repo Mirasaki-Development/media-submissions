@@ -1,0 +1,70 @@
+export type AppConfig = {
+  /**
+   * The Discord client information
+   * @see https://discord.com/developers/applications
+   */
+  client: {
+    id: string;
+    token: string;
+  };
+  /**
+   * The media modules to use
+   */
+  mediaModules: MediaModule[];
+};
+
+export type MediaType = 'image' | 'video' | 'either';
+
+export type MediaSource = {
+  name: string;
+  validationURL: string | 'attachment';
+}
+
+export type MediaModule = {
+  /** The name of this media module */
+  name: string;
+  /** The type of media this module supports */
+  type: MediaType;
+  /** The channel ID to listen for submissions in */
+  submissionsChannelId: string;
+  /** The channel ID to send submissions to */
+  submissionsOutputChannelId: string;
+  /**
+   * The cron schedule for when to output submissions
+   * @see https://crontab.guru/
+   */
+  cronOutputSubmission: string;
+  /**
+   * The timezone for the cron schedule, e.g. 'America/New_York'
+   * @see https://momentjs.com/timezone/
+   */
+  cronTimezone: string;
+  /** The emojis to indicate upvote and downvote */
+  votingEmojis: {
+    upvote: string;
+    downvote: string;
+  };
+  /** Should non-submission messages, like user feedback, be deleted? */
+  deleteNonSubmissions: boolean;
+  /**
+   * Allowed media sources
+   * @see src/media-sources.ts
+   */
+  allowedSources: MediaSource[];
+  /** The amount of seconds a user should be on cooldown before submitting again */
+  submissionCooldown: number | null;
+  /** Quantities for submissions */
+  quantities: {
+    /** The maximum amount of submissions allowed */
+    maxSubmissions: number | null;
+    /** The maximum amount of submissions allowed per user */
+    maxSubmissionsPerUser: number | null;
+    /** The maximum amount of attachments allowed per submission */
+    attachmentsPerSubmission: number | null;
+  }
+  /** Should a public thread be created for organized feedback? */
+  submissionThread: {
+    enabled: boolean;
+    name: string;
+  }
+};

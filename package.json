@@ -1,0 +1,40 @@
+{
+  "name": "media-submissions",
+  "version": "1.0.0",
+  "description": "Media Submissions is a Discord bot that allows you to configure fully automatic, and user-driven, picture/clip of the week/month channels.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsup",
+    "start": "node dist/index.js",
+    "dev": "tsup --watch --onSuccess \"node dist/index.js\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mirasaki-Development/media-submissions.git"
+  },
+  "keywords": [
+    "discord",
+    "media",
+    "media-submissions",
+    "cotw",
+    "potw",
+    "cotm",
+    "potm",
+    "clip-of-the-week",
+    "clip-of-the-month"
+  ],
+  "author": "Richard Hillebrand <me@mirasaki.dev> (https://mirasaki.dev/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Mirasaki-Development/media-submissions/issues"
+  },
+  "homepage": "https://github.com/Mirasaki-Development/media-submissions#readme",
+  "devDependencies": {
+    "tsup": "^8.1.0",
+    "typescript": "^5.5.2"
+  },
+  "dependencies": {
+    "discord.js": "^14.15.3"
+  }
+}
