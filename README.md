@@ -40,7 +40,7 @@ This application uses the following Discord Gateway Intents:
 
 > ⚠️ **Note:** The `Message Content` intent is required, you have to enable it in the Discord Developer Portal, please view [our guide](https://wiki.mirasaki.dev/docs/discord-create-application#intents) if you need more information.
 
-Please analyze the [source code](./src) if you have (data) security concerns, the intents are utilized in the following files:
+Feel free to analyze the [source code](./src) if you have (data) security concerns, the intents are utilized in the following files:
 
 - `./src/message-create.ts`
 - `./src/message-delete.ts`
