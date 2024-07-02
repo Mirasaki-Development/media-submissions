@@ -8,4 +8,4 @@ services:
       - NODE_ENV=production
       - DATABASE_URL=file:./production.db
     volumes:
-      - ./production.db:/app/production.db
+      - ./prisma/production.db:/app/prisma/production.db
