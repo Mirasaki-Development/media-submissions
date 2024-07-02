@@ -49,7 +49,9 @@ export const validateSubmissionMediaSources = async (
     const fetchURL = (url: string) => fetch(url).then((res) => res.blob()).then((blob) => blob.type);
     for await (const url of urls) { // One by one, escape if invalid
       const contentType = await fetchURL(url);
-      console.log('contentType', contentType + ' for ' + url)
+      if (contentType.startsWith('text/html') && (type === 'video' || type === 'either')) {
+        continue; // Skip HTML pages
+      }
       if (type === 'image' && !contentType.startsWith('image/')) {
         debugLog(`${debugTag} Invalid image URL: ${url} (${contentType})`);
         tryToDMUser(message, {
