@@ -119,6 +119,14 @@ export const initMediaModule = async (
       files: winner.attachments.map((attachment) => attachment.url),
     });
 
+    if (mediaModule.winningSubmissionThread.enabled) {
+      await outputMessage.startThread({
+        name: mediaModule.winningSubmissionThread.name,
+        autoArchiveDuration: mediaModule.winningSubmissionThread.autoArchiveDuration ?? undefined,
+        rateLimitPerUser: mediaModule.winningSubmissionThread.rateLimitPerUser ?? undefined,
+      });
+    }
+
     await prisma.submission.update({
       where: {
         id: winnerSubmission.id,

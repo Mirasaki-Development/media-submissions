@@ -48,6 +48,12 @@ export const appConfig: AppConfig = {
       },
       submissionThread: {
         enabled: true,
+        name: 'Reply',
+        autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
+        rateLimitPerUser: null,
+      },
+      winningSubmissionThread: {
+        enabled: true,
         name: 'Clip of the Week Feedback',
         autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
         rateLimitPerUser: null,
@@ -77,6 +83,12 @@ export const appConfig: AppConfig = {
         attachmentsPerSubmission: 1,
       },
       submissionThread: {
+        enabled: true,
+        name: 'Reply',
+        autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
+        rateLimitPerUser: null,
+      },
+      winningSubmissionThread: {
         enabled: true,
         name: 'Picture of the Week Feedback',
         autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,

@@ -1,5 +1,13 @@
 import { ThreadAutoArchiveDuration } from 'discord.js';
 
+export type ThreadConfig = {
+  enabled: boolean;
+  name: string;
+  autoArchiveDuration: ThreadAutoArchiveDuration | null;
+  /** The rate limit per user (slowmode) for the thread in seconds */
+  rateLimitPerUser: number | null;
+};
+
 export type AppConfig = {
   // /**
   //  * The Discord client information
@@ -71,11 +79,6 @@ export type MediaModule = {
     attachmentsPerSubmission: number | null;
   }
   /** Should a public thread be created for organized feedback? */
-  submissionThread: {
-    enabled: boolean;
-    name: string;
-    autoArchiveDuration: ThreadAutoArchiveDuration | null;
-    /** The rate limit per user (slowmode) for the thread in seconds */
-    rateLimitPerUser: number | null;
-  }
+  submissionThread: ThreadConfig;
+  winningSubmissionThread: ThreadConfig;
 };
