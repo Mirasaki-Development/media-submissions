@@ -110,7 +110,7 @@ export const initMediaModule = async (
     const outputMessage = await outputChannel.send({
       content: stripIndents`
         ## ${name} Winner
-        👑 **Winner:** ${winner.author}
+        👑 **Winner:** ${winner.author} - [Jump to original](<${winner.url}>)
         🆙 **Votes:** ${winner.reactions.cache.get(votingEmojis.upvote)?.count ?? 0}
         📥 **Submissions:** ${validMessages.length}
         🗳️ **Total Votes:** ${validMessages.reduce((acc, message) => acc + (message.reactions.cache.get(votingEmojis.upvote)?.count ?? 0), 0)}

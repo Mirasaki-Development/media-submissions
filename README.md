@@ -28,7 +28,8 @@ Every aspect of this app and it's functionality is configurable, including:
 - Media sources: `discord`, `imgur`, `medal` and `youtube` by default
 - The submission cooldown - separate from channel slow-mode
 - Submission quantity: Should only 1 media attachment be allowed, or a gallery/collection of multiple entries?
-- Discussion Threads: Should a public thread be attached to submissions to allow organized feedback?
+- Discussion Threads: Should a public thread be attached to submissions (and the winning submission) to allow organized feedback?
+- Block Other Emojis: Should other, non-voting, emojis be automatically removed from submissions?
 
 ## 🙋 Intents
 
@@ -37,6 +38,7 @@ This application uses the following Discord Gateway Intents:
 - `Guilds`: Required to receive guild message events, and populate channel information.
 - `GuildMessages`: Required to receive guild message events, as this is the source of submissions.
 - `MessageContent`: This is a **Privileged Intent**, and is required to determine if a message has *either* allowed media sources in it's attachments or message content through the `validationURL`.
+- `GuildMessageReactions`: Required to remove non-vote reactions from submissions, configurable - and can be omitted when not blocking other reactions.
 
 > ⚠️ **Note:** The `Message Content` intent is required, you have to enable it in the Discord Developer Portal, please view [our guide](https://wiki.mirasaki.dev/docs/discord-create-application#intents) if you need more information.
 

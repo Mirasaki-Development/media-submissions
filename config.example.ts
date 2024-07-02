@@ -58,6 +58,7 @@ export const appConfig: AppConfig = {
         autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
         rateLimitPerUser: null,
       },
+      blockOtherReactions: true,
     },
     {
       id: 'potw',
@@ -94,6 +95,7 @@ export const appConfig: AppConfig = {
         autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
         rateLimitPerUser: null,
       },
+      blockOtherReactions: true,
     }
   ],
 };

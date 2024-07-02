@@ -80,5 +80,8 @@ export type MediaModule = {
   }
   /** Should a public thread be created for organized feedback? */
   submissionThread: ThreadConfig;
+  /** Should a public thread be created for the winning submission? */
   winningSubmissionThread: ThreadConfig;
+  /** Should other reactions be automatically removed on submissions? */
+  blockOtherReactions: boolean;
 };

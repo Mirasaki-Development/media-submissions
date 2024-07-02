@@ -6,6 +6,7 @@ import { onMessageCreate } from './message-create'
 import { onMessageDelete } from './message-delete'
 import { onMessageUpdate } from './message-update'
 import { initMediaModule } from './media-module-run'
+import { onMessageReactionAdd } from './message-reaction-add'
 
 const {
   DISCORD_CLIENT_ID,
@@ -22,6 +23,7 @@ const client = new Client({
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildMessageReactions,
   ],
 })
 
@@ -30,6 +32,7 @@ client.once('ready', (c) => {
   c.on('messageCreate', (message) => onMessageCreate(c, message, mediaModules))
   c.on('messageDelete', (message) => onMessageDelete(c, message, mediaModules))
   c.on('messageUpdate', (oldMessage, newMessage) => onMessageUpdate(c, oldMessage, newMessage, mediaModules))
+  c.on('messageReactionAdd', (reaction, user) => onMessageReactionAdd(c, reaction, user, mediaModules))
   mediaModules.forEach((mediaModule) => initMediaModule(c, mediaModule))
 })
 
