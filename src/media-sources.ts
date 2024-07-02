@@ -12,7 +12,7 @@ export const imgurMediaSource: MediaSource = {
 
 export const medalMediaSource: MediaSource = {
   name: 'Medal',
-  validationURL: 'https://medal.tv/clips/',
+  validationURL: 'https://medal.tv/',
 }
 
 export const youtubeMediaSource: MediaSource = {
