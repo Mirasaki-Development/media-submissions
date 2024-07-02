@@ -24,6 +24,7 @@ export const validateSubmissionMediaSources = async (
 ): Promise<boolean> => {
   const { attachments } = message;
   const {
+    name,
     type,
     allowedSources,
     quantities,
