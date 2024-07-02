@@ -3,7 +3,6 @@ import { isMediaSubmission, validateSubmissionMediaSources } from './message-cre
 import { MediaModule } from './types';
 import { prisma } from './prisma';
 import { debugLog } from './logger';
-import { messageHasMediaSource } from './media-sources';
 
 export const onMessageUpdate = async (
   client: Client<true>,
