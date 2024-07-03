@@ -29,7 +29,7 @@ const client = new Client({
 })
 
 client.once('ready', (c) => {
-  console.log(`Logged in as ${c.user.tag}`)
+  console.info(`Logged in as ${c.user.tag}`)
   c.on('messageCreate', (message) => onMessageCreate(c, message, mediaModules))
   c.on('messageDelete', (message) => onMessageDelete(c, message, mediaModules))
   c.on('messageUpdate', (oldMessage, newMessage) => onMessageUpdate(c, oldMessage, newMessage, mediaModules))

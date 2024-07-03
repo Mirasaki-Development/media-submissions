@@ -38,6 +38,7 @@ export const preFetchSubmissionPeriodMessages = async (
     mediaModule.cronTimezone,
   )
 
+  debugLog(`${debugTag} Fetching messages from ${currStart.toISOString()} to ${currEnd.toISOString()}`);
   const messages = await fetchMessages(submissionsChannel, currStart, currEnd, true);
   debugLog(`${debugTag} Fetched ${messages.size} messages, cached to memory to receive reactions`);
   
@@ -66,25 +67,34 @@ export const fetchMessages = async (
 
   let fromMessageId: string | undefined = undefined;
   const messages = new Map<string, Message<true>>();
-  while (true) {
-    const messages = await fetchBatch(fromMessageId);
-    if (messages.size === 0) {
-      break;
+
+  await new Promise<void>((resolve) => {
+    const run = async () => {
+      const innerMessages = await fetchBatch(fromMessageId);
+      if (innerMessages.size === 0) {
+        resolve();
+        return;
+      }
+  
+      const inTimeFrame = innerMessages.filter((message) => {
+        const createdAt = message.createdAt.valueOf();
+        return createdAt >= startVal && createdAt <= endVal;
+      });
+      if (inTimeFrame.size === 0) {
+        resolve();
+        return;
+      }
+  
+      inTimeFrame.forEach((message) => {
+        messages.set(message.id, message);
+      });
+      fromMessageId = innerMessages.lastKey();
+
+      await run();
     }
 
-    const inTimeFrame = messages.filter((message) => {
-      const createdAt = message.createdAt.valueOf();
-      return createdAt >= startVal && createdAt <= endVal;
-    });
-    if (inTimeFrame.size === 0) {
-      break;
-    }
-
-    inTimeFrame.forEach((message) => {
-      messages.set(message.id, message);
-    });
-    fromMessageId = messages.lastKey();
-  }
+    run();
+  });
 
   debugLog(`${debugTag} Fetched ${messages.size} messages`);
   return messages;
