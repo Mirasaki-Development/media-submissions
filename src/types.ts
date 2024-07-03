@@ -2,6 +2,19 @@ import { ThreadAutoArchiveDuration } from 'discord.js';
 
 export type ThreadConfig = {
   enabled: boolean;
+  /**
+   * The name of the thread, the following placeholders are available:
+   * 
+   * - `{name}`: The name of the media module
+   * - `{date}`: The date of the submission
+   * - `{time}`: The time of the submission
+   * - `{author}`: The author of the submission
+   * - `{id}`: The ID of the submission
+   * - `{channel}`: The channel of the submission
+   * - `{link}`: The link to the submission
+   * - `{upvotes}`: The upvotes of the submission
+   * - `{downvotes}`: The downvotes of the submission
+   */
   name: string;
   autoArchiveDuration: ThreadAutoArchiveDuration | null;
   /** The rate limit per user (slowmode) for the thread in seconds */

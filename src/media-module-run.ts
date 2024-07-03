@@ -5,6 +5,7 @@ import { Client, Message } from 'discord.js';
 import { prisma } from './prisma';
 import { debugLog } from './logger';
 import { MediaModule } from './types';
+import { buildPlaceholders, replacePlaceholders } from './placeholders';
 
 export const initMediaModule = async (
   client: Client<true>,
@@ -100,10 +101,22 @@ export const initMediaModule = async (
       return;
     }
 
+    if (!winner.inGuild()) {
+      debugLog(`${debugTag} Winner message is not in guild, aborting...`);
+      return;
+    }
+
     const winnerSubmission = data.find((submission) => submission.messageId === winner.id);
     if (!winnerSubmission) {
       throw new Error('Unresolved winner submission, please create a GitHub issue');
     }
+
+    const placeholders = await buildPlaceholders(
+      mediaModule,
+      winnerSubmission,
+      new Date(winner.createdTimestamp),
+      winner,
+    );
 
     debugLog(`${debugTag} Found winning message: ${winner.id} with submission ${winnerSubmission.id}`);
 
@@ -121,7 +134,10 @@ export const initMediaModule = async (
 
     if (mediaModule.winningSubmissionThread.enabled) {
       await outputMessage.startThread({
-        name: mediaModule.winningSubmissionThread.name,
+        name: replacePlaceholders(
+          mediaModule.winningSubmissionThread.name,
+          placeholders,
+        ),
         autoArchiveDuration: mediaModule.winningSubmissionThread.autoArchiveDuration ?? undefined,
         rateLimitPerUser: mediaModule.winningSubmissionThread.rateLimitPerUser ?? undefined,
       });

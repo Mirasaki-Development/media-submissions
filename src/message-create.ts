@@ -3,6 +3,7 @@ import { MediaModule } from './types';
 import { debugLog } from './logger';
 import { countSubmissions, getUserSubmissions, prisma } from './prisma';
 import { messageHasMediaSource } from './media-sources';
+import { buildPlaceholders, replacePlaceholders } from './placeholders';
 
 export const tryToDMUser = async (
   message: Message,
@@ -179,7 +180,7 @@ export const onMessageCreate = async (
   message: Message,
   mediaModules: MediaModule[],
 ): Promise<void> => {
-  if (message.author.bot) return;
+  if (message.author.bot || !message.inGuild()) return;
 
   const mediaModule = isMediaSubmission(message, mediaModules);
   if (!mediaModule) return;
@@ -243,7 +244,7 @@ export const onMessageCreate = async (
   );
 
   // Everything is okay, let's do the thing =)
-  await Promise.all([
+  const [ submission ] = await Promise.all([
     prisma.submission.create({
       data: {
         mediaModuleId: mediaModule.id,
@@ -259,17 +260,24 @@ export const onMessageCreate = async (
     message.react(votingEmojis.upvote).then(() => message.react(votingEmojis.downvote)).catch((e) => {
       debugLog(`${debugTag} Failed to react to message:`, e);
     }),
-    submissionThread.enabled ? channel.threads.create({
-      name: submissionThread.name,
+  ])
+
+  if (submissionThread.enabled) {
+    await channel.threads.create({
+      name: replacePlaceholders(submissionThread.name, await buildPlaceholders(
+        mediaModule,
+        submission,
+        submission.createdAt,
+        message,
+      )),
       autoArchiveDuration: submissionThread.autoArchiveDuration ?? undefined,
       startMessage: message,
       reason: 'Submission feedback thread for organized discussion/feedback.',
       rateLimitPerUser: submissionThread.rateLimitPerUser ?? undefined,
     }).catch((e) => {
-      debugLog(`${debugTag} Failed to create thread:`, e);
-    }) : Promise.resolve(),
-  ])
-
+      debugLog(`${debugTag} Failed to create submission thread:`, e);
+    })
+  }
 }
 
 export const isMediaSubmission = (
