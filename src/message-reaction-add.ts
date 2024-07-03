@@ -18,15 +18,19 @@ export const onMessageReactionAdd = async (
     return;
   }
 
+  const resolvedReaction = reaction.partial
+    ? await reaction.fetch()
+    : reaction;
+
   const moduleEmojis = Object.values(mediaModule.votingEmojis);
   if (reaction.emoji.name && !moduleEmojis.includes(reaction.emoji.name)) {
-    debugLog(`${debugTag} Reaction not in module voting emojis, removing "${reaction.emoji.name}"...`);
-    await reaction.message.reactions.resolve(reaction.emoji.name)?.users.remove(user.id);
+    debugLog(`${debugTag} [name] Reaction not in module voting emojis, removing "${reaction.emoji.name}"...`);
+    await reaction.message.reactions.resolve(resolvedReaction)?.users.remove(user.id);
     return;
   }
   if (reaction.emoji.id && !moduleEmojis.includes(reaction.emoji.id)) {
-    debugLog(`${debugTag} Reaction not in module voting emojis, removing "${reaction.emoji.id}"...`);
-    await reaction.message.reactions.resolve(reaction.emoji.id)?.users.remove(user.id);
+    debugLog(`${debugTag} [id] Reaction not in module voting emojis, removing "${reaction.emoji.id}"...`);
+    await reaction.message.reactions.resolve(resolvedReaction)?.users.remove(user.id);
     return;
   }
 }
