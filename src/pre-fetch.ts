@@ -8,7 +8,7 @@ import { debugLog } from './logger';
  * and cache them to memory to receive reactions
  * @param mediaModule The media module to pre-fetch messages for
  * @param client The logged in Discord client
- * @returns 
+ * @returns A promise that resolves when the messages have been fetched
  */
 export const preFetchSubmissionPeriodMessages = async (
   client: Client<true>,
@@ -46,8 +46,8 @@ export const preFetchSubmissionPeriodMessages = async (
 
 export const fetchMessages = async (
   channel: TextChannel | NewsChannel | StageChannel | PrivateThreadChannel | PublicThreadChannel | VoiceChannel,
-  start: Date,
-  end: Date,
+  start: Date, // Oldest date, fetch messages before this date
+  end: Date, // Newest date, fetch messages after this date
   shouldCache = false
 ): Promise<Map<string, Message<true>>> => {
   const debugTag = `[${channel.name}/fetch]`;
@@ -61,6 +61,9 @@ export const fetchMessages = async (
     return messages;
   }
 
+  const startVal = start.valueOf();
+  const endVal = end.valueOf();
+
   let fromMessageId: string | undefined = undefined;
   const messages = new Map<string, Message<true>>();
   while (true) {
@@ -70,8 +73,8 @@ export const fetchMessages = async (
     }
 
     const inTimeFrame = messages.filter((message) => {
-      const createdAt = message.createdAt;
-      return createdAt >= start && createdAt <= end;
+      const createdAt = message.createdAt.valueOf();
+      return createdAt >= startVal && createdAt <= endVal;
     });
     if (inTimeFrame.size === 0) {
       break;
