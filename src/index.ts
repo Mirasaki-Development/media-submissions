@@ -7,6 +7,7 @@ import { onMessageDelete } from './message-delete'
 import { onMessageUpdate } from './message-update'
 import { initMediaModule } from './media-module-run'
 import { onMessageReactionAdd } from './message-reaction-add'
+import { preFetchSubmissionPeriodMessages } from './pre-fetch'
 
 const {
   DISCORD_CLIENT_ID,
@@ -33,7 +34,10 @@ client.once('ready', (c) => {
   c.on('messageDelete', (message) => onMessageDelete(c, message, mediaModules))
   c.on('messageUpdate', (oldMessage, newMessage) => onMessageUpdate(c, oldMessage, newMessage, mediaModules))
   c.on('messageReactionAdd', (reaction, user) => onMessageReactionAdd(c, reaction, user, mediaModules))
-  mediaModules.forEach((mediaModule) => initMediaModule(c, mediaModule))
+  mediaModules.forEach((mediaModule) => {
+    initMediaModule(c, mediaModule)
+    preFetchSubmissionPeriodMessages(c, mediaModule)
+  })
 })
 
 client.login(DISCORD_CLIENT_TOKEN)
