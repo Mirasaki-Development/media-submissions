@@ -43,7 +43,7 @@ export const preFetchSubmissionPeriodMessages = async (
 
   // Note: Since this is used to cache the "current" submission period,
   // we don't have to provide an end date and worry about timezones
-  const messages = await fetchMessages(submissionsChannel, currStart, undefined, true);
+  const messages = await fetchMessages(submissionsChannel, currStart, new Date(), true);
   debugLog(`${debugTag} Fetched ${messages.size} messages, cached to memory to receive reactions`);
   
   return;
