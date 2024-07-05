@@ -31,7 +31,7 @@ export const initMediaModule = async (
     const prevDate = new Date(now.getTime() - offset);
     debugLog(`${debugTag} Fetching submissions from ${prevDate.toISOString()} to ${now.toISOString()}`);
 
-    const submissionsChannel = await client.channels.fetch(submissionsChannelId);
+    const submissionsChannel = await client.channels.fetch(submissionsChannelId).catch(() => null);
     if (!submissionsChannel) {
       debugLog(`${debugTag} Submissions channel not found`);
       return;
@@ -41,7 +41,7 @@ export const initMediaModule = async (
       return;
     }
 
-    const outputChannel = await client.channels.fetch(submissionsOutputChannelId);
+    const outputChannel = await client.channels.fetch(submissionsOutputChannelId).catch(() => null);
     if (!outputChannel) {
       debugLog(`${debugTag} Output channel not found`);
       return;
@@ -65,7 +65,7 @@ export const initMediaModule = async (
     debugLog(`${debugTag} Found ${data.length} submissions, resolving submission messages (this can take a long time)...`);
 
     const messages = await Promise.all(data.map(async (submission) => {
-      const message = await submissionsChannel.messages.fetch(submission.messageId);
+      const message = await submissionsChannel.messages.fetch(submission.messageId).catch(() => null);
       if (!message) {
         debugLog(`${debugTag} Submission message not found: ${submission.messageId}`);
         return null;

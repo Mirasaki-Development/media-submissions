@@ -20,7 +20,7 @@ export const preFetchSubmissionPeriodMessages = async (
 
   debugLog(`${debugTag} Fetching messages for submission period to receive reactions`);
 
-  const submissionsChannel = await client.channels.fetch(submissionsChannelId);
+  const submissionsChannel = await client.channels.fetch(submissionsChannelId).catch(() => null);
   if (!submissionsChannel) {
     debugLog(`${debugTag} Submissions channel not found`);
     return;
@@ -62,6 +62,9 @@ export const fetchMessages = async (
       before: fromMessageId,
       limit: 100,
       cache: shouldCache,
+    }).catch((e) => {
+      debugLog(`${debugTag} Failed to fetch messages:`, e);
+      return null;
     });
     return messages;
   }
@@ -75,7 +78,7 @@ export const fetchMessages = async (
   await new Promise<void>((resolve) => {
     const run = async () => {
       const innerMessages = await fetchBatch(fromMessageId);
-      if (innerMessages.size === 0) {
+      if (innerMessages === null || innerMessages.size === 0) {
         resolve();
         return;
       }
