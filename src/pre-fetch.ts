@@ -1,4 +1,5 @@
 import { Client, Message, NewsChannel, PrivateThreadChannel, PublicThreadChannel, StageChannel, TextChannel, VoiceChannel } from 'discord.js';
+
 import { MediaModule } from './types';
 import { getCurrentStartEnd } from './prisma';
 import { debugLog } from './logger';
@@ -39,7 +40,10 @@ export const preFetchSubmissionPeriodMessages = async (
   )
 
   debugLog(`${debugTag} Fetching messages from ${currStart.toISOString()} to ${currEnd.toISOString()}`);
-  const messages = await fetchMessages(submissionsChannel, currStart, currEnd, true);
+
+  // Note: Since this is used to cache the "current" submission period,
+  // we don't have to provide an end date and worry about timezones
+  const messages = await fetchMessages(submissionsChannel, currStart, undefined, true);
   debugLog(`${debugTag} Fetched ${messages.size} messages, cached to memory to receive reactions`);
   
   return;
@@ -48,7 +52,7 @@ export const preFetchSubmissionPeriodMessages = async (
 export const fetchMessages = async (
   channel: TextChannel | NewsChannel | StageChannel | PrivateThreadChannel | PublicThreadChannel | VoiceChannel,
   start: Date, // Oldest date, fetch messages before this date
-  end: Date, // Newest date, fetch messages after this date
+  end?: Date, // Newest date, fetch messages after this date
   shouldCache = false
 ): Promise<Map<string, Message<true>>> => {
   const debugTag = `[${channel.name}/fetch]`;
@@ -63,7 +67,7 @@ export const fetchMessages = async (
   }
 
   const startVal = start.valueOf();
-  const endVal = end.valueOf();
+  const endVal = end?.valueOf() ?? Date.now();
 
   let fromMessageId: string | undefined = undefined;
   const messages = new Map<string, Message<true>>();
