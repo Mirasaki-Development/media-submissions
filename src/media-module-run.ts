@@ -129,7 +129,7 @@ export const initMediaModule = async (
         📥 **Submissions:** ${validMessages.length}
         🗳️ **Total Votes:** ${validMessages.reduce((acc, message) => acc + (message.reactions.cache.get(votingEmojis.upvote)?.count ?? 0), 0)}
         ${winner.attachments.size > 0
-            ? `\n\n**Attachments:** ${winner.attachments.map((attachment, ind) => `[#${ind+1} ${attachment.name}](${attachment.url})`).join(', ')}`
+            ? `\n\n${winner.attachments.map((attachment) => attachment.url).join('\n')}`
             : `\n\n**Content:** ${winner.content}`}
       `,
     });
