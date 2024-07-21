@@ -121,27 +121,6 @@ export const initMediaModule = async (
 
     debugLog(`${debugTag} Found winning message: ${winner.id} with submission ${winnerSubmission.id}`);
 
-    const attachments: AttachmentBuilder[] = [];
-    console.log(winner.attachments.size)
-    for (const attachment of winner.attachments.values()) {
-        console.dir(attachment, { depth: Infinity })
-        const response = await axios.get(attachment.url, {
-          responseType: 'arraybuffer',
-          timeout: 0
-        }).catch(() => null);
-        console.log(response)
-        if (!response) {
-          debugLog(`${debugTag} Failed to fetch attachment: ${attachment.url}`);
-          continue
-        }
-        console.log(response.data)
-        attachments.push(
-          new AttachmentBuilder(Buffer.from(response.data))
-            .setName(attachment.name)
-            .setDescription(`Winning submission by ${winner.author.tag}`)
-        );
-    }
-
     const outputMessage = await outputChannel.send({
       content: stripIndents`
         ## ${name} Winner
@@ -149,9 +128,10 @@ export const initMediaModule = async (
         🆙 **Votes:** ${winner.reactions.cache.get(votingEmojis.upvote)?.count ?? 0}
         📥 **Submissions:** ${validMessages.length}
         🗳️ **Total Votes:** ${validMessages.reduce((acc, message) => acc + (message.reactions.cache.get(votingEmojis.upvote)?.count ?? 0), 0)}
-        ${winner.attachments.size > 0 ? '' : `\n\n**Content:** ${winner.content}`}
+        ${winner.attachments.size > 0
+            ? `\n\n**Attachments:** ${winner.attachments.map((attachment, ind) => `[#${ind+1} ${attachment.name}](${attachment.url})`).join(', ')}`
+            : `\n\n**Content:** ${winner.content}`}
       `,
-      files: attachments
     });
 
     if (mediaModule.winningSubmissionThread.enabled) {
