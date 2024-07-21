@@ -1,6 +1,7 @@
 import { CronJob } from 'cron';
 import { stripIndents } from 'common-tags';
 import { AttachmentBuilder, Client, Message } from 'discord.js';
+import axios from 'axios';
 
 import { prisma } from './prisma';
 import { debugLog } from './logger';
@@ -124,16 +125,18 @@ export const initMediaModule = async (
     console.log(winner.attachments.size)
     for (const attachment of winner.attachments.values()) {
         console.dir(attachment, { depth: Infinity })
-        const response = await fetch(attachment.url).catch(() => null);
+        const response = await axios.get(attachment.url, {
+          responseType: 'arraybuffer',
+          timeout: 0
+        }).catch(() => null);
         console.log(response)
         if (!response) {
           debugLog(`${debugTag} Failed to fetch attachment: ${attachment.url}`);
           continue
         }
-        const buffer = await response.arrayBuffer();
-        console.log(buffer.byteLength)
+        console.log(response.data)
         attachments.push(
-          new AttachmentBuilder(Buffer.from(buffer))
+          new AttachmentBuilder(Buffer.from(response.data))
             .setName(attachment.name)
             .setDescription(`Winning submission by ${winner.author.tag}`)
         );
