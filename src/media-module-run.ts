@@ -1,6 +1,6 @@
 import { CronJob } from 'cron';
 import { stripIndents } from 'common-tags';
-import { Client, Message } from 'discord.js';
+import { AttachmentBuilder, Client, Message } from 'discord.js';
 
 import { prisma } from './prisma';
 import { debugLog } from './logger';
@@ -120,6 +120,21 @@ export const initMediaModule = async (
 
     debugLog(`${debugTag} Found winning message: ${winner.id} with submission ${winnerSubmission.id}`);
 
+    const attachments: AttachmentBuilder[] = [];
+    for (const attachment of winner.attachments.values()) {
+        const response = await fetch(attachment.url).catch(() => null);
+        if (!response) {
+          debugLog(`${debugTag} Failed to fetch attachment: ${attachment.url}`);
+          continue
+        }
+        const buffer = await response.arrayBuffer();
+        attachments.push(
+          new AttachmentBuilder(Buffer.from(buffer))
+            .setName(attachment.name)
+            .setDescription(`Winning submission by ${winner.author.tag}`)
+        );
+    }
+
     const outputMessage = await outputChannel.send({
       content: stripIndents`
         ## ${name} Winner
@@ -129,10 +144,7 @@ export const initMediaModule = async (
         🗳️ **Total Votes:** ${validMessages.reduce((acc, message) => acc + (message.reactions.cache.get(votingEmojis.upvote)?.count ?? 0), 0)}
         ${winner.attachments.size > 0 ? '' : `\n\n**Content:** ${winner.content}`}
       `,
-      files: winner.attachments.map(attachment => ({
-          attachment: attachment.url,
-          name: attachment.name
-      }))
+      files: attachments
     });
 
     if (mediaModule.winningSubmissionThread.enabled) {
