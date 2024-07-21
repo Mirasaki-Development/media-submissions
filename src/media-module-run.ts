@@ -121,13 +121,17 @@ export const initMediaModule = async (
     debugLog(`${debugTag} Found winning message: ${winner.id} with submission ${winnerSubmission.id}`);
 
     const attachments: AttachmentBuilder[] = [];
+    console.log(winner.attachments.size)
     for (const attachment of winner.attachments.values()) {
+        console.dir(attachment, { depth: Infinity })
         const response = await fetch(attachment.url).catch(() => null);
+        console.log(response)
         if (!response) {
           debugLog(`${debugTag} Failed to fetch attachment: ${attachment.url}`);
           continue
         }
         const buffer = await response.arrayBuffer();
+        console.log(buffer.byteLength)
         attachments.push(
           new AttachmentBuilder(Buffer.from(buffer))
             .setName(attachment.name)
