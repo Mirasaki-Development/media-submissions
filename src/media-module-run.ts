@@ -1,6 +1,6 @@
 import { CronJob } from 'cron';
 import { stripIndents } from 'common-tags';
-import { Client, Message } from 'discord.js';
+import { AttachmentBuilder, Client, Message } from 'discord.js';
 
 import { prisma } from './prisma';
 import { debugLog } from './logger';
@@ -129,7 +129,10 @@ export const initMediaModule = async (
         🗳️ **Total Votes:** ${validMessages.reduce((acc, message) => acc + (message.reactions.cache.get(votingEmojis.upvote)?.count ?? 0), 0)}
         ${winner.attachments.size > 0 ? '' : `\n\n**Content:** ${winner.content}`}
       `,
-      files: winner.attachments.map((attachment) => attachment.url),
+      files: winner.attachments.map((attachment) => new AttachmentBuilder(attachment.url)
+        .setName(attachment.name)
+        .setDescription(`Winner submission by ${winner.author.tag} - ${new Date(winner.createdTimestamp).toLocaleString()}`)
+      ),
     });
 
     if (mediaModule.winningSubmissionThread.enabled) {
