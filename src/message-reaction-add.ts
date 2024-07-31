@@ -1,4 +1,4 @@
-import { Client, Emoji, MessageReaction, PartialMessageReaction, PartialUser, User } from 'discord.js';
+import { Client, MessageReaction, PartialMessageReaction, PartialUser, User } from 'discord.js';
 import { MediaModule } from './types';
 import { debugLog } from './logger';
 
@@ -19,8 +19,13 @@ export const onMessageReactionAdd = async (
   }
 
   const resolvedReaction = reaction.partial
-    ? await reaction.fetch()
+    ? await reaction.fetch().catch(() => null)
     : reaction;
+  
+  if (!resolvedReaction) {
+    debugLog(`${debugTag} Unresolved reaction, skipping...`);
+    return;
+  }
 
   const moduleEmojis = Object.values(mediaModule.votingEmojis);
   if (reaction.emoji.name && !moduleEmojis.includes(reaction.emoji.name)) {

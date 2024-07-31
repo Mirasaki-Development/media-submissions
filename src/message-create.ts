@@ -263,13 +263,18 @@ export const onMessageCreate = async (
   ])
 
   if (submissionThread.enabled) {
+    const placeholders = await buildPlaceholders(
+      mediaModule,
+      submission,
+      submission.createdAt,
+      message,
+    );
+    if (!placeholders) {
+      debugLog(`${debugTag} Failed to build placeholders - this most likely means the message couldn't be resolved, aborting...`);
+      return;
+    }
     await channel.threads.create({
-      name: replacePlaceholders(submissionThread.name, await buildPlaceholders(
-        mediaModule,
-        submission,
-        submission.createdAt,
-        message,
-      )),
+      name: replacePlaceholders(submissionThread.name, placeholders),
       autoArchiveDuration: submissionThread.autoArchiveDuration ?? undefined,
       startMessage: message,
       reason: 'Submission feedback thread for organized discussion/feedback.',

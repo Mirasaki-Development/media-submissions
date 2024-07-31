@@ -25,7 +25,12 @@ export const onMessageUpdate = async (
     return;
   }
 
-  const message = await newMessage.fetch();
+  const message = await newMessage.fetch().catch(() => null);
+  if (!message) {
+    debugLog(`${debugTag} Unresolved message, skipping...`);
+    return;
+  }
+
   const conditionalDelete = async () => {
     if (mediaModule.deleteNonSubmissions) {
       message.delete().catch((e) => {

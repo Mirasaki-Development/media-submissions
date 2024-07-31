@@ -1,7 +1,6 @@
 import { CronJob } from 'cron';
 import { stripIndents } from 'common-tags';
-import { AttachmentBuilder, Client, Message } from 'discord.js';
-import axios from 'axios';
+import { Client, Message } from 'discord.js';
 
 import { prisma } from './prisma';
 import { debugLog } from './logger';
@@ -118,6 +117,11 @@ export const initMediaModule = async (
       new Date(winner.createdTimestamp),
       winner,
     );
+
+    if (!placeholders) {
+      debugLog(`${debugTag} Failed to build placeholders - this most likely means the message couldn't be resolved, aborting...`);
+      return;
+    }
 
     debugLog(`${debugTag} Found winning message: ${winner.id} with submission ${winnerSubmission.id}`);
 

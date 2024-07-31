@@ -19,10 +19,13 @@ export const buildPlaceholders = async (
   submission: Submission,
   date: Date,
   message: Message<true> | PartialMessage,
-): Promise<Placeholders> => {
-  const resolvedMessage: Message<true> = message.partial
-    ? await message.fetch() as Message<true>
+): Promise<null | Placeholders> => {
+  const resolvedMessage: Message<true> | null = message.partial
+    ? await message.fetch().catch(() => null) as Message<true> | null
     : await Promise.resolve(message);
+  if (!resolvedMessage) {
+    return null;
+  }
   return {
     name: mediaModule.name,
     date: `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
