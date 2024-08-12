@@ -37,7 +37,7 @@ This application uses the following Discord Gateway Intents:
 
 - `Guilds`: Required to receive guild message events, and populate channel information.
 - `GuildMessages`: Required to receive guild message events, as this is the source of submissions.
-- `MessageContent`: This is a **Privileged Intent**, and is required to determine if a message has *either* allowed media sources in it's attachments or message content through the `validationURL`.
+- `MessageContent`: This is a **Privileged Intent**, and is required to determine if a message has *either* allowed media sources in it's attachments or message content through `validationURLs`.
 - `GuildMessageReactions`: Required to remove non-vote reactions from submissions, configurable - and can be omitted when not blocking other reactions.
 
 > ⚠️ **Note:** The `Message Content` intent is required, you have to enable it in the Discord Developer Portal, please view [our guide](https://wiki.mirasaki.dev/docs/discord-create-application#intents) if you need more information.

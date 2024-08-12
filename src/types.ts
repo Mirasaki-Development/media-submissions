@@ -40,7 +40,7 @@ export type MediaType = 'image' | 'video' | 'either';
 
 export type MediaSource = {
   name: string;
-  validationURL: string | 'attachment';
+  validationURLs: (string | 'attachment')[];
 }
 
 export type MediaModule = {

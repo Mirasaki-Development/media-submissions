@@ -2,22 +2,22 @@ import { MediaSource } from './types'
 
 export const discordMediaSource: MediaSource = {
   name: 'Discord',
-  validationURL: 'attachment',
+  validationURLs: [ 'attachment' ],
 }
 
 export const imgurMediaSource: MediaSource = {
   name: 'Imgur',
-  validationURL: 'https://imgur.com/gallery/',
+  validationURLs: [ 'https://imgur.com/gallery/' ],
 }
 
 export const medalMediaSource: MediaSource = {
   name: 'Medal',
-  validationURL: 'https://medal.tv/',
+  validationURLs: [ 'https://medal.tv/' ],
 }
 
 export const youtubeMediaSource: MediaSource = {
   name: 'Youtube',
-  validationURL: 'https://www.youtube.com/watch?v=',
+  validationURLs: [ 'https://www.youtube.com/watch?v=', 'https://youtu.be/' ],
 }
 
 export const defaultMediaSources: MediaSource[] = [
@@ -45,8 +45,10 @@ export const messageHasMediaSource = (
   if (quantity !== null) {
     const urls = message.split(' ').filter((word) => word.includes('http'))
     const validSources = urls.map((url) => mediaSources.find((source) => {
-      if (source.validationURL === 'attachment') return discordAttachmentSources.some((attachmentSource) => url.includes(attachmentSource))
-      return url.includes(source.validationURL)
+      return source.validationURLs.some((validationURL) => {
+        if (validationURL === 'attachment') return discordAttachmentSources.some((attachmentSource) => url.includes(attachmentSource))
+        return url.includes(validationURL)
+      })
     }))
     const uniqueSources = [...new Set(validSources)] as MediaSource[]
     if (uniqueSources.length > quantity) return false;
@@ -58,7 +60,9 @@ export const messageHasMediaSource = (
   }
 
   return mediaSources.find((source) => {
-    if (source.validationURL === 'attachment') return discordAttachmentSources.some((attachmentSource) => message.includes(attachmentSource))
-    return message.includes(source.validationURL)
+    return source.validationURLs.some((validationURL) => {
+      if (validationURL === 'attachment') return discordAttachmentSources.some((attachmentSource) => message.includes(attachmentSource))
+      return message.includes(validationURL)
+    });
   }) ?? false
 }

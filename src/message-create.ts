@@ -34,7 +34,7 @@ export const validateSubmissionMediaSources = async (
 
   if ( // Ensure submission source is present and allowed
     !messageHasMediaSource(message.content, allowedSources, quantities.attachmentsPerSubmission)
-    && (!allowedSources.find((e) => e.validationURL === 'attachment') || attachments.size === 0)
+    && (!allowedSources.find((e) => e.validationURLs.includes('attachment')) || attachments.size === 0)
   ) {
     debugLog(`${debugTag} Invalid media source`);
     tryToDMUser(message, {
