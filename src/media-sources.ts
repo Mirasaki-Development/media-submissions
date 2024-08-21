@@ -17,7 +17,7 @@ export const medalMediaSource: MediaSource = {
 
 export const youtubeMediaSource: MediaSource = {
   name: 'Youtube',
-  validationURLs: [ 'https://www.youtube.com/watch?v=', 'https://youtu.be/' ],
+  validationURLs: [ 'https://www.youtube.com/watch?v=', 'https://youtu.be/', 'https://www.youtube.com/shorts/' ],
 }
 
 export const defaultMediaSources: MediaSource[] = [
