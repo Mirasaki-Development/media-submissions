@@ -8,6 +8,7 @@ import { onMessageUpdate } from './message-update'
 import { initMediaModule } from './media-module-run'
 import { onMessageReactionAdd } from './message-reaction-add'
 import { preFetchSubmissionPeriodMessages } from './pre-fetch'
+import { debugEnabled, debugLog } from './logger'
 
 const {
   DISCORD_CLIENT_ID,
@@ -38,6 +39,13 @@ client.once('ready', (c) => {
     initMediaModule(c, mediaModule)
     preFetchSubmissionPeriodMessages(c, mediaModule)
   })
+
+  if (debugEnabled) {
+    c.on('debug', (info) => debugLog('debug', info))
+      .on('warn', (info) => debugLog('warn', info))
+      .on('error', (info) => debugLog('error', info));
+    c.rest.on('rateLimited', (info) => debugLog('rate-limited', info))
+  }
 })
 
 client.login(DISCORD_CLIENT_TOKEN)
